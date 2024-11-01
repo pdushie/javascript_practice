@@ -1,0 +1,33 @@
+Fri Nov 01 2024 18:48:14 GMT+0000 (Coordinated Universal Time)[INFO] [
+    {
+        "userId": 1,
+        "userName": "Philip",
+        "age": 36
+    },
+    {
+        "userId": 2,
+        "userName": "Tamana",
+        "age": 33
+    },
+    {
+        "userId": 3,
+        "userName": "Brian",
+        "age": 40
+    }
+]Fri Nov 01 2024 18:48:28 GMT+0000 (Coordinated Universal Time)[INFO] [
+    {
+        "userId": 1,
+        "userName": "Philip",
+        "age": 36
+    },
+    {
+        "userId": 2,
+        "userName": "Tamana",
+        "age": 33
+    },
+    {
+        "userId": 3,
+        "userName": "Brian",
+        "age": 40
+    }
+]
