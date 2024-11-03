@@ -1,0 +1,28 @@
+html {
+  width: 100%
+}
+
+body {
+  width: 100%;
+  margin: auto;
+  background-color: moccasin;
+}
+ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(43, 43, 53);
+  height: 60px;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+ul li a {
+  text-decoration: none;
+  color: rgb(245, 235, 235);
+  font-size: 1.3rem;
+  font-weight: bold;
+}
