@@ -16,17 +16,13 @@ async function getData() {
 
 // Create another asynchronous function which waits for getData to complete its data fetch
 
-async function displayData() {
-  data = await getData();
-  //console.log(data);
-  return data;
-}
-
 let displayCard = document.querySelector('#showCard');
+let cardName = document.querySelector('#cardName');
 
 async function getCardImage () {
-  data = await displayData();
+  data = await getData();
   displayCard.innerHTML = `<img src=${JSON.stringify(data.cards[0].image)} alt="Card Image">`;
+  cardName.innerHTML = `<h2>${JSON.stringify(data.cards[0].suit)}</h2>`;
 }
 
 document.getElementById("showImage").addEventListener("click", ()=>{getCardImage()});
