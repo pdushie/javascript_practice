@@ -1,4 +1,4 @@
-// To install express js run npm init and then run npm install express
+// To install express js run npm init and then run npm install express.
 // Install nodemon. Nodemon allows you to have your changes applied without having to restart the web server
 // Run the web server using nodemon => nodemon app.js
 import express from 'express';
