@@ -8,13 +8,18 @@ const app = new express();
 // Declare port number on which express would listen for incomming connections
 const port = 8080;
 
+//Middleware section
+app.use(express.json());
+
 // Connect to database using better-sqlite3
 const db = Database('./database/chinook.sqlite', { fileMustExist: true });
 
 // Define Joi validation schema for employee table
 const employeeSchema = Joi.object({
     // List fields of table to be validated with Joi
-})
+    LastName: Joi.string().required().max(20),
+    FirstName: Joi.string().required().max(20),
+});
 
 // Serve static files using express
 app.use(express.static("public"));
@@ -42,25 +47,46 @@ app.get('/api/employees', (req, res) => {
 // Create endpoint to get an employee with a specific ID
 app.get('/api/employees/:id', (req, res) => {
     // Validate id to ensure it is a number
-    if (isNaN(req.params.id)){
+    if (isNaN(req.params.id)) {
         return res.status(404).send({
             error: "id must be an integer"
         });
     }
-    
-    const statement = db.prepare(`SELECT * FROM employees WHERE EmployeeId=${req.params.id};`);
-    const result = statement.get();
-    if(!result) {
-        return res.send({
-            message: "No record found"
+
+    try {
+        const statement = db.prepare(`SELECT * FROM employeees WHERE EmployeeId=${req.params.id};`);
+        const result = statement.get();
+        if (!result) {
+            return res.send({
+                message: "No record found"
+            });
+        }
+        res.send(result);
+    } catch (err) {
+        res.status(404).send({
+            message: `There was a problem connecting to the database. Try again later`,
+            error: err.code
         });
     }
-    res.send(result);
 });
 
 // Create endpoint to add records to the employee table
-app.post('/api/employee', (req, res) => {
+app.post('/api/employees', (req, res) => {
     // Perform validation using Joi schema
+    const validationResult = employeeSchema.validate(req.body);
+    // Once validationResult contains the error object, it means a a validation error occured
+    if (validationResult.error) {
+        console.log(req.body, validationResult);
+        return res.status(422).send({
+            Error: validationResult.error.details
+        });
+    }
+
+    // SQL Statement to dynamicall insert data into database
+
+    res.send('Done');
+
+
 })
 
 
