@@ -1,0 +1,17 @@
+{
+  "name": "api_practice",
+  "version": "1.0.0",
+  "main": "api.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "better-sqlite3": "^11.5.0",
+    "joi": "^17.13.3"
+  }
+}
