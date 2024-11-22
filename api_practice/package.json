@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "better-sqlite3": "^11.5.0",
+    "express": "^4.21.1",
     "joi": "^17.13.3"
   }
 }
