@@ -10,6 +10,7 @@ const port = 8080;
 
 //Middleware section
 app.use(express.json());
+app.use(express.urlencoded());// middleware to handle form data (x-www-form-urlencoded)
 
 // Connect to database using better-sqlite3
 const db = Database('./database/chinook.sqlite', { fileMustExist: true });
@@ -17,9 +18,10 @@ const db = Database('./database/chinook.sqlite', { fileMustExist: true });
 // Define Joi validation schema for employee table
 const employeeSchema = Joi.object({
     // List fields of table to be validated with Joi
-    LastName: Joi.string().required().max(20),
-    FirstName: Joi.string().required().max(20),
-    Title: Joi.string().max(30)
+    LastName: Joi.string().required().max(20).message('The field last name is required'),
+    FirstName: Joi.string().required().max(20).message('The field first name is required'),
+    Title: Joi.string().max(30),
+    PostalCode: Joi.string().pattern(new RegExp(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)).message('Invalid Canadian postal code')
 });
 
 // Serve static files using express
@@ -73,34 +75,43 @@ app.get('/api/employees/:id', (req, res) => {
 
 // Create endpoint to add records to the employee table
 app.post('/api/employees', (req, res) => {
-    // Perform validation using Joi schema
+    //Perform validation using Joi schema
     const validationResult = employeeSchema.validate(req.body);
     // Once validationResult contains the error object, it means a a validation error occured
     if (validationResult.error) {
         console.log(req.body, validationResult);
         return res.status(422).send({
-            Error: validationResult.error.details
+            Error: validationResult.error.message
         });
     }
 
-    // SQL Statement to dynamicall insert data into database
-    // Create a function to dynamically prepare insert statement when called (Function Name: prepareInsertStatement)
-    // prepareInsertStatement takes two parameters: table name and payload or req.body
-    const {sql, values} = prepareInsertStatement('employees', req.body);
+    //SQL Statement to dynamicall insert data into database
+    //Create a function to dynamically prepare insert statement when called (Function Name: prepareInsertStatement)
+    //prepareInsertStatement takes two parameters: table name and payload or req.body
+    try {
+        const { sql, values } = prepareInsertStatement('employees', req.body);
 
-    const statement = db.prepare(sql);
-    const result = statement.run(values);
-    
-    res.send(result);
+        const statement = db.prepare(sql);
+        const result = statement.run(values);
+        res.send(result);
+    } catch (err) {
+        res.status(404).send(err);
+    }
 
+});
 
-})
+// Endpoint to receive post from form
+app.post('/', (req, res) => {
+    console.log(req.body);
+    res.send();
+});
+
 // Configure express to listen on port 8080
 app.listen(port, () => {
     console.log("Server listening on port", port);
 });
 
-function prepareInsertStatement(tableName, payload){
+function prepareInsertStatement(tableName, payload) {
     const insertFields = Object.keys(payload);
     const insertValues = Object.values(payload);
     const statement = `INSERT INTO ${tableName} (${insertFields.join(', ')}) VALUES(${insertValues.map(() => '?').join(', ')});`;
