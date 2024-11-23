@@ -1,6 +1,7 @@
 import express from 'express';
 import Database from 'better-sqlite3';
 import Joi from 'joi';
+import multer from 'multer';
 
 // Create instance of express function
 const app = new express();
@@ -14,6 +15,15 @@ app.use(express.urlencoded());// middleware to handle form data (x-www-form-urle
 
 // To handle uploads, Multer will be used. Multer is a middleware that handles uploads in node.js
 // Install multer using node package manager and configure storage engine
+const storage = multer.diskStorage({
+    destination: './uploads',
+    filename: function (req, file, callback) {
+        const newFileName = `uploads_${file.originalname}`;
+        callback(null, newFileName);
+    }
+});
+
+const upload = multer({storage})
 
 // Connect to database using better-sqlite3
 const db = Database('./database/chinook.sqlite', { fileMustExist: true });
@@ -103,10 +113,14 @@ app.post('/api/employees', (req, res) => {
 
 });
 
-// Endpoint to receive post from form
-app.post('/', (req, res) => {
-    console.log(req.body);
-    res.send();
+//Endpoint to receive uploaded files
+app.post('/uploads', upload.single('myfile'), (req,res) => {
+    // Perform validation to ensure file was uploaded from the frontend
+    if(!req.file){
+        return res.status(400).send("No file was uploaded")
+    }
+
+    res.send(`File uploaded Successfully and saved as ${req.file.filename}`);
 });
 
 // Configure express to listen on port 8080
