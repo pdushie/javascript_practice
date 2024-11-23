@@ -19,6 +19,7 @@ const employeeSchema = Joi.object({
     // List fields of table to be validated with Joi
     LastName: Joi.string().required().max(20),
     FirstName: Joi.string().required().max(20),
+    Title: Joi.string().max(30)
 });
 
 // Serve static files using express
@@ -83,15 +84,28 @@ app.post('/api/employees', (req, res) => {
     }
 
     // SQL Statement to dynamicall insert data into database
+    // Create a function to dynamically prepare insert statement when called (Function Name: prepareInsertStatement)
+    // prepareInsertStatement takes two parameters: table name and payload or req.body
+    const {sql, values} = prepareInsertStatement('employees', req.body);
 
-    res.send('Done');
+    const statement = db.prepare(sql);
+    const result = statement.run(values);
+    
+    res.send(result);
 
 
 })
-
-
-
 // Configure express to listen on port 8080
 app.listen(port, () => {
     console.log("Server listening on port", port);
 });
+
+function prepareInsertStatement(tableName, payload){
+    const insertFields = Object.keys(payload);
+    const insertValues = Object.values(payload);
+    const statement = `INSERT INTO ${tableName} (${insertFields.join(', ')}) VALUES(${insertValues.map(() => '?').join(', ')});`;
+    return {
+        sql: statement,
+        values: insertValues
+    };
+}
