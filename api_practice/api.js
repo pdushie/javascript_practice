@@ -12,6 +12,9 @@ const port = 8080;
 app.use(express.json());
 app.use(express.urlencoded());// middleware to handle form data (x-www-form-urlencoded)
 
+// To handle uploads, Multer will be used. Multer is a middleware that handles uploads in node.js
+// Install multer using node package manager and configure storage engine
+
 // Connect to database using better-sqlite3
 const db = Database('./database/chinook.sqlite', { fileMustExist: true });
 
