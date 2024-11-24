@@ -114,12 +114,11 @@ app.post('/api/employees', (req, res) => {
 });
 
 //Endpoint to receive uploaded files
-app.post('/uploads', upload.single('myfile'), (req,res) => {
+app.post('/uploads',  upload.single('myfile'), (req,res) => {
     // Perform validation to ensure file was uploaded from the frontend
     if(!req.file){
         return res.status(400).send("No file was uploaded")
     }
-
     res.send(`File uploaded Successfully and saved as ${req.file.filename}`);
 });
 
