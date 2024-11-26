@@ -108,7 +108,7 @@ app.post('/api/employees', (req, res) => {
         const result = statement.run(values);
         res.send(result);
     } catch (err) {
-        res.status(404).send(err);
+        console.log(err);
     }
 
 });

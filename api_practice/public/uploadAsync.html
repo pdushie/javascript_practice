@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 20px;
+    }
+
+    input, label {
+      display: block;
+    }
+
+    input,button{ 
+      margin-bottom: 15px;
+      height: 40px;
+      width: 30%;
+    }
+
+  </style>
+  <title>Async Upload</title>
+</head>
+<body>
+  <h1>Upload Photo</h1>
+  <form id="asyncForm">
+    <label>Caption:
+      <input type="text" name="caption" required>
+    </label>
+    <label>Select Image:
+      <input type="file" name="uploadImage" accept="image/*">
+    </label>
+    <button type="submit">Submit File</button>
+  </form>
+  <script>
+    (function (){
+      
+    })
+
+  </script>
+</body>
+</html>
